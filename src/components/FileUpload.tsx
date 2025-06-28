@@ -35,21 +35,24 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   };
 
   const handleFiles = (files: File[]) => {
-    const audioFile = files.find(file => file.type.startsWith('audio/') || file.name.endsWith('.mp3'));
+    const audioFile = files.find(file => 
+      file.type.startsWith('audio/') || 
+      /\.(mp3|wav|m4a|ogg|flac|aac|wma)$/i.test(file.name)
+    );
     
     if (!audioFile) {
       toast({
         title: "Format non supporté",
-        description: "Veuillez sélectionner un fichier audio (MP3, WAV, etc.)",
+        description: "Veuillez sélectionner un fichier audio (MP3, WAV, M4A, OGG, FLAC, AAC)",
         variant: "destructive",
       });
       return;
     }
 
-    if (audioFile.size > 50 * 1024 * 1024) { // 50MB limit
+    if (audioFile.size > 100 * 1024 * 1024) { // 100MB limit
       toast({
         title: "Fichier trop volumineux",
-        description: "La taille maximale autorisée est de 50MB",
+        description: "La taille maximale autorisée est de 100MB",
         variant: "destructive",
       });
       return;
@@ -74,7 +77,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         <input
           ref={fileInputRef}
           type="file"
-          accept="audio/*,.mp3,.wav,.m4a"
+          accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac,.aac,.wma"
           onChange={handleFileChange}
           className="hidden"
         />
@@ -98,7 +101,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
               ou cliquez pour sélectionner un fichier
             </p>
             <p className="text-sm text-slate-500">
-              Formats supportés : MP3, WAV, M4A (max 50MB)
+              Formats supportés : MP3, WAV, M4A, OGG, FLAC, AAC (max 100MB)
             </p>
           </div>
         </div>
@@ -114,7 +117,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       <div className="mt-6 flex items-center justify-center space-x-4 text-sm text-slate-400">
         <div className="flex items-center space-x-2">
           <AlertCircle className="w-4 h-4" />
-          <span>Vos fichiers sont traités localement et en sécurité</span>
+          <span>Traitement 100% local avec IA Whisper - Aucune donnée envoyée sur internet</span>
         </div>
       </div>
     </div>
